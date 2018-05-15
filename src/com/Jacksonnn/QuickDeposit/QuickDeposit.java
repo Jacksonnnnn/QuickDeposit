@@ -8,11 +8,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public class QuickDeposit extends JavaPlugin {
 	
-		public static QuickDeposit plugin;
+	public static QuickDeposit plugin;
+	
+	public String prefix = "ChatColor.DARK_GREY + \"[\" + ChatColor.YELLOW + \"QuickDeposit\" + ChatColor.DARK_GREY + \"] \"";
 	
 	public void onEnable() {
 		plugin = this;
-		Bukkit.getServer().getLogger().info(ChatColor.YELLOW + "[QuickDeposit] QuickDeposit has sucessfully been enabled!");
+		Bukkit.getServer().getLogger().info(prefix + ChatColor.YELLOW + "QuickDeposit has sucessfully been enabled!");
 		
 		registerListeners();
 	}
@@ -24,6 +26,6 @@ public class QuickDeposit extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		Bukkit.getServer().getLogger().info(ChatColor.YELLOW + "[QuickDeposit] QuickDeposit has sucessfully been disabled!");
+		Bukkit.getServer().getLogger().info(prefix + ChatColor.YELLOW + "[QuickDeposit] QuickDeposit has sucessfully been disabled!");
 	}
 }
