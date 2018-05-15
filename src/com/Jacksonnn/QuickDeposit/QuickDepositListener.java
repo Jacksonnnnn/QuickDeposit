@@ -1,20 +1,14 @@
 package com.Jacksonnn.QuickDeposit;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Chest;
 
 public class QuickDepositListener implements Listener {
 		@EventHandler
@@ -29,13 +23,15 @@ public class QuickDepositListener implements Listener {
 						if (blockAbove.isOccluding()) {
 							return;
 						}
-						int empty = ((Inventory) chest).firstEmpty();
+						int empty = chest.getBlockInventory().firstEmpty();
 						
-						if (!(empty == -1)) {
+						if (empty != -1) {
 							ItemStack handItem = event.getPlayer().getInventory().getItemInMainHand();
-							((Inventory) chest).addItem(handItem);
+							
+							chest.getBlockInventory().addItem(handItem);
 							
 							event.getPlayer().getInventory().removeItem(handItem);
+							event.getPlayer().updateInventory();
 						}
 			        }
 		    	}
