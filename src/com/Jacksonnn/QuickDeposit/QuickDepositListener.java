@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -15,33 +17,30 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Chest;
 
 public class QuickDepositListener implements Listener {
-
-	@EventHandler
-	    public void onInteract(PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		if (!player.isSneaking()) {
-			return;
-		} else {
-	        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-	            Block block = ((BlockState) event).getBlock();
-	            if (block.getState() instanceof Chest) {
-	            	Block clickedBlock = ((BlockState) event).getBlock();
-	            	InventoryHolder chest = (InventoryHolder) clickedBlock.getState();
-	        		Inventory chestInventory = chest.getInventory();
-	        		ItemStack[] playerInventory = player.getInventory().getContents();
-	                
-	        		Material blockAbove = clickedBlock.getRelative(BlockFace.UP).getType();
-	        		if (blockAbove.isOccluding()) {
-	        			return;
-	        		} else {
-	        			for(ItemStack item : playerInventory){
-	        		        chestInventory.addItem(item);
-	        			}
-	        		}
-	            } else {
-	            	return;
-	            }
-	        }
-	    }
-	}
+		@EventHandler
+		public void onInteract(PlayerInteractEvent event) {
+		    if (event.getPlayer().isSneaking()) {
+		    	if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+		    		BlockState state = (BlockState) event.getClickedBlock().getState();
+			        if (state instanceof Chest) {
+			            Chest chest = (Chest) state;
+			            
+			            Material blockAbove = event.getClickedBlock().getRelative(BlockFace.UP).getType();
+						if (blockAbove.isOccluding()) {
+							return;
+						}
+						int empty = ((Inventory) chest).firstEmpty();
+						
+						if (!(empty == -1)) {
+							ItemStack handItem = event.getPlayer().getInventory().getItemInMainHand();
+							((Inventory) chest).addItem(handItem);
+							
+							event.getPlayer().getInventory().removeItem(handItem);
+						}
+			        }
+		    	}
+		    }
+		
+		
+		}
 }
