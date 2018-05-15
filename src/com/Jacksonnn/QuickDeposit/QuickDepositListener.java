@@ -3,11 +3,11 @@ package com.Jacksonnn.QuickDeposit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -17,15 +17,15 @@ import org.bukkit.material.Chest;
 public class QuickDepositListener implements Listener {
 
 	@EventHandler
-	    public void onInteract(PlayerInteractEvent event, BlockDamageEvent event2) {
+	    public void onInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		if (!player.isSneaking()) {
 			return;
 		} else {
 	        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-	            Block block = event2.getBlock();
+	            Block block = ((BlockState) event).getBlock();
 	            if (block.getState() instanceof Chest) {
-	            	Block clickedBlock = event2.getBlock();
+	            	Block clickedBlock = ((BlockState) event).getBlock();
 	            	InventoryHolder chest = (InventoryHolder) clickedBlock.getState();
 	        		Inventory chestInventory = chest.getInventory();
 	        		ItemStack[] playerInventory = player.getInventory().getContents();
